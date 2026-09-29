@@ -1,0 +1,6 @@
+# Publicação: apenas os arquivos do site em dist
+*.md
+.openai/
+.impeccable/
+.codex/
+.agents/
