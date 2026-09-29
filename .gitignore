@@ -1,5 +1,6 @@
-# Publicação: apenas os arquivos do site em dist
+# Publicar o site e o README
 *.md
+!/README.md
 .openai/
 .impeccable/
 .codex/
