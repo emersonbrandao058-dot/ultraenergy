@@ -1,41 +1,37 @@
 # Ultra Energy
 
-Landing page estática da Ultra Energy, empresa de energia solar que atende todo o estado da Bahia. A página apresenta os serviços, explica o atendimento, responde dúvidas frequentes e direciona visitantes ao WhatsApp.
-
-## Serviços e atendimento
-
-A Ultra Energy trabalha com projeto, instalação, monitoramento e limpeza de sistemas fotovoltaicos. O foco é residencial e comercial, com atendimento também a clientes industriais e rurais.
-
-O comercial faz o primeiro contato. A engenharia avalia a necessidade e o equipamento. Após o contrato, seguem projeto, homologação junto à concessionária, compra dos equipamentos, instalação e vistoria. Depois da aprovação, pós-vendas e engenharia monitoram o sistema sem custo adicional. A plataforma **Solarz** fornece relatórios de desempenho.
+Landing page estática da Ultra Energy, de Feira de Santana, com atendimento em todo o estado da Bahia. A página apresenta os serviços, explica as etapas do atendimento, responde dúvidas frequentes e leva o visitante ao WhatsApp.
 
 ## Executar localmente
 
-Abra `dist/index.html` em um navegador. O projeto usa apenas HTML, CSS e JavaScript; não há instalação de dependências nem etapa de build.
+Abra `dist/index.html` no navegador. O site usa HTML, CSS e JavaScript sem dependências ou etapa de build.
 
 ```text
 dist/
 ├── index.html
-└── assets/
-    ├── hero-solar.png
-    ├── site.js
-    └── styles.css
+├── assets/
+│   ├── hero-solar.png
+│   ├── site.js
+│   └── styles.css
+└── image/
+    ├── favicon.png
+    └── logo-ultraenergy-horizontal.png
 ```
 
-- `dist/index.html`: conteúdo e estrutura da página.
-- `dist/assets/styles.css`: identidade visual e adaptação para celular.
-- `dist/assets/site.js`: menu, ano no rodapé e links de WhatsApp.
+O número e a mensagem inicial do WhatsApp ficam em `dist/assets/site.js`.
 
-Para alterar o destino dos botões de contato, edite `WHATSAPP_NUMBER` e `WHATSAPP_MESSAGE` em `dist/assets/site.js`.
+## Conteúdo e integrações
 
-## Conteúdo ilustrativo
-
-A imagem do hero foi criada para o conceito visual. A área de projetos é um espaço reservado, e o painel Solarz é uma ilustração sem dados reais. **Fotos de projetos, números e imagens do painel não devem ser apresentados como resultados reais** até que a equipe forneça e autorize o material correspondente.
+- A área de projetos leva à aba de Reels de [@ultraenergyfsa](https://www.instagram.com/ultraenergyfsa/reels/). Os vídeos não são copiados para o site; a atualização automática pode ser implementada depois.
+- A seção de localização incorpora um mapa do Google Maps de **Feira de Santana**. O mapa representa a cidade, não a sede da empresa; ainda não há endereço confirmado.
+- A plataforma **Solarz** é citada como ferramenta de monitoramento e relatórios. A moldura de celular mostra um estado provisório, sem simular a interface ou métricas. Quando houver uma gravação real autorizada, adicione o arquivo em `dist/assets/` e o atributo `src` ao vídeo `.phone-video` em `dist/index.html`; os controles e a reprodução inline já estão preparados.
+- A foto dos painéis no hero é uma imagem conceitual. Não apresentar fotos de obras, clientes ou números como reais sem material autorizado.
+- A logo horizontal oficial aparece no cabeçalho e no rodapé; o favicon fornecido substitui o ícone provisório. A versão somente texto permanece em `image/` para uso futuro.
+O mapa e os links externos precisam de conexão com a internet. A página não inclui formulário, banco de dados ou integração de análise de tráfego.
 
 ## Antes de usar como site público
 
 1. Confirmar o número de WhatsApp configurado em `dist/assets/site.js` como canal comercial definitivo.
-2. Revisar com a equipe as respostas às dúvidas frequentes e a descrição das etapas de atendimento.
-3. Substituir os espaços ilustrativos por fotos e dados reais autorizados, se forem publicados.
+2. Revisar as respostas às dúvidas frequentes e as etapas de atendimento com a equipe.
+3. Usar fotos e dados reais somente depois de autorização.
 4. Definir domínio, hospedagem e HTTPS.
-
-O repositório versiona o site em `dist/` e este README. Arquivos locais de contexto e ferramentas de design ficam fora do Git.
