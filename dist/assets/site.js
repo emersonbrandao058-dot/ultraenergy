@@ -79,92 +79,33 @@ if ("IntersectionObserver" in window && !reducedMotion.matches) {
   });
 }
 
-// The FAQ progressively enhances into a scroll-led sequence; without JavaScript it remains a readable list.
-const faqSection = document.querySelector("#duvidas");
-const faqSteps = Array.from(document.querySelectorAll("[data-faq-step]"));
-
-if (faqSection && faqSteps.length && !reducedMotion.matches &&
-    "IntersectionObserver" in window && "requestAnimationFrame" in window) {
-  let frameId = null;
-  let isTracking = false;
-  let currentIndex = -1;
-
-  function clamp(value, minimum, maximum) {
-    return Math.min(Math.max(value, minimum), maximum);
-  }
-
-  function updateFaqSteps() {
-    frameId = null;
-    if (!isTracking) return;
-
-    const compactLayout = window.matchMedia("(max-width: 980px)").matches;
-    const viewportHeight = window.innerHeight;
-    const focalPoint = viewportHeight * (compactLayout ? 0.48 : 0.5);
-    const transitionRange = viewportHeight * (compactLayout ? 0.44 : 0.52);
-    const travel = compactLayout ? 18 : 42;
-    const minimumOpacity = compactLayout ? 0.46 : 0.22;
-    let closestIndex = 0;
-    let closestDistance = Infinity;
-
-    faqSteps.forEach((step, index) => {
-      const rect = step.getBoundingClientRect();
-      const distance = (rect.top + rect.height / 2 - focalPoint) / transitionRange;
-      const intensity = Math.min(Math.abs(distance), 1);
-      const opacity = minimumOpacity + (1 - minimumOpacity) * (1 - intensity);
-
-      step.style.setProperty("--faq-opacity", opacity.toFixed(3));
-      step.style.setProperty("--faq-y", `${clamp(distance * travel, -travel, travel).toFixed(2)}px`);
-
-      if (Math.abs(distance) < closestDistance) {
-        closestDistance = Math.abs(distance);
-        closestIndex = index;
-      }
+const faqQuestions = document.querySelectorAll(".faq-question");
+faqQuestions.forEach(question => {
+  question.addEventListener("click", () => {
+    const shouldOpen = question.getAttribute("aria-expanded") !== "true";
+    faqQuestions.forEach(otherQuestion => {
+      otherQuestion.setAttribute("aria-expanded", "false");
+      otherQuestion.querySelector(".faq-indicator").textContent = "+";
+      document.getElementById(otherQuestion.getAttribute("aria-controls")).hidden = true;
     });
-
-    if (closestIndex !== currentIndex) {
-      faqSteps.forEach((step, index) => {
-        const current = index === closestIndex;
-        step.classList.toggle("is-current", current);
-        if (current) step.setAttribute("aria-current", "step");
-        else step.removeAttribute("aria-current");
-      });
-      currentIndex = closestIndex;
+    if (shouldOpen) {
+      question.setAttribute("aria-expanded", "true");
+      question.querySelector(".faq-indicator").textContent = "\u2212";
+      document.getElementById(question.getAttribute("aria-controls")).hidden = false;
     }
-  }
-
-  function scheduleFaqUpdate() {
-    if (isTracking && frameId === null) frameId = requestAnimationFrame(updateFaqSteps);
-  }
-
-  function resetFaqMotion() {
-    isTracking = false;
-    faqSection.classList.remove("faq-motion-ready", "is-tracking");
-    window.removeEventListener("scroll", scheduleFaqUpdate);
-    window.removeEventListener("resize", scheduleFaqUpdate);
-    if (frameId !== null) cancelAnimationFrame(frameId);
-    faqSteps.forEach(step => {
-      step.style.removeProperty("--faq-opacity");
-      step.style.removeProperty("--faq-y");
-      step.classList.remove("is-current");
-      step.removeAttribute("aria-current");
-    });
-  }
-
-  const faqObserver = new IntersectionObserver(entries => {
-    isTracking = entries[0].isIntersecting;
-    faqSection.classList.toggle("is-tracking", isTracking);
-    if (isTracking) scheduleFaqUpdate();
-  }, { rootMargin: "20% 0px 20% 0px" });
-
-  faqSection.classList.add("faq-motion-ready");
-  faqObserver.observe(faqSection);
-  window.addEventListener("scroll", scheduleFaqUpdate, { passive: true });
-  window.addEventListener("resize", scheduleFaqUpdate);
-  scheduleFaqUpdate();
-
-  reducedMotion.addEventListener?.("change", event => {
-    if (!event.matches) return;
-    faqObserver.disconnect();
-    resetFaqMotion();
   });
-}
+});
+
+const spotlightMedia = window.matchMedia("(min-width: 681px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+document.querySelectorAll(".solution-card").forEach(card => {
+  card.addEventListener("pointermove", event => {
+    if (!spotlightMedia.matches) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--spotlight-x", (event.clientX - rect.left) + "px");
+    card.style.setProperty("--spotlight-y", (event.clientY - rect.top) + "px");
+  });
+  card.addEventListener("pointerleave", () => {
+    card.style.removeProperty("--spotlight-x");
+    card.style.removeProperty("--spotlight-y");
+  });
+});

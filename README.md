@@ -22,8 +22,8 @@ O número e a mensagem inicial do WhatsApp ficam em `dist/assets/site.js`.
 
 ## Conteúdo e integrações
 
-- A área de projetos leva à aba de Reels de [@ultraenergyfsa](https://www.instagram.com/ultraenergyfsa/reels/). Os vídeos não são copiados para o site; a atualização automática pode ser implementada depois.
-- A seção de localização incorpora um mapa do Google Maps de **Feira de Santana**. O mapa representa a cidade, não a sede da empresa; ainda não há endereço confirmado.
+- A seção de projetos incorpora dois Reels escolhidos manualmente de [@ultraenergyfsa](https://www.instagram.com/ultraenergyfsa/). Para adicionar outro, duplique um elemento `figure.reel-card` em `dist/index.html` e troque a URL no bloco `instagram-media` e nos dois links do card. O site não atualiza esses vídeos automaticamente.
+- A seção de localização consulta no Google Maps o endereço informado, Rua Miguel Calmon, 19, Jardim Cruzeiro, Feira de Santana. O botão “Abrir rota” usa o mesmo destino. A precisão do pino para o nº 19 não foi confirmada independentemente.
 - A plataforma **Solarz** é citada como ferramenta de monitoramento e relatórios. A moldura de celular mostra um estado provisório, sem simular a interface ou métricas. Quando houver uma gravação real autorizada, adicione o arquivo em `dist/assets/` e o atributo `src` ao vídeo `.phone-video` em `dist/index.html`; os controles e a reprodução inline já estão preparados.
 - A foto dos painéis no hero é uma imagem conceitual. Não apresentar fotos de obras, clientes ou números como reais sem material autorizado.
 - A logo horizontal oficial aparece no cabeçalho e no rodapé; o favicon fornecido substitui o ícone provisório. A versão somente texto permanece em `image/` para uso futuro.
