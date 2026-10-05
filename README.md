@@ -4,34 +4,38 @@ Landing page estática da Ultra Energy, de Feira de Santana, com atendimento em 
 
 ## Executar localmente
 
-Abra `dist/index.html` no navegador. O site usa HTML, CSS e JavaScript sem dependências ou etapa de build.
+Edite os arquivos em `src/` e execute `npm run build` para gerar `dist/` quando for testar ou publicar. Depois, abra `dist/index.html` no navegador. O site usa HTML, CSS e JavaScript sem dependências externas.
 
 ```text
-dist/
+src/
 ├── index.html
 ├── assets/
 │   ├── hero-solar.png
 │   ├── site.js
+│   ├── solarz-motion.mp4
+│   ├── solarz-poster.jpg
 │   └── styles.css
 └── image/
     ├── favicon.png
     └── logo-ultraenergy-horizontal.png
+
+dist/  ← gerado por npm run build e incluído no repositório
 ```
 
-O número e a mensagem inicial do WhatsApp ficam em `dist/assets/site.js`.
+O número e a mensagem inicial do WhatsApp ficam em `src/assets/site.js`.
 
 ## Conteúdo e integrações
 
-- A seção de projetos incorpora dois Reels escolhidos manualmente de [@ultraenergyfsa](https://www.instagram.com/ultraenergyfsa/). Para adicionar outro, duplique um elemento `figure.reel-card` em `dist/index.html` e troque a URL no bloco `instagram-media` e nos dois links do card. O site não atualiza esses vídeos automaticamente.
+- A seção de projetos incorpora dois Reels escolhidos manualmente de [@ultraenergyfsa](https://www.instagram.com/ultraenergyfsa/). Para adicionar outro, duplique um elemento `figure.reel-card` em `src/index.html` e troque a URL no bloco `instagram-media` e nos dois links do card. O site não atualiza esses vídeos automaticamente.
 - A seção de localização consulta no Google Maps o endereço informado, Rua Miguel Calmon, 19, Jardim Cruzeiro, Feira de Santana. O botão “Abrir rota” usa o mesmo destino. A precisão do pino para o nº 19 não foi confirmada independentemente.
-- A plataforma **Solarz** é citada como ferramenta de monitoramento e relatórios. A moldura de celular mostra um estado provisório, sem simular a interface ou métricas. Quando houver uma gravação real autorizada, adicione o arquivo em `dist/assets/` e o atributo `src` ao vídeo `.phone-video` em `dist/index.html`; os controles e a reprodução inline já estão preparados.
+- A plataforma **Solarz** é citada como ferramenta de monitoramento e relatórios. A seção exibe o vídeo fornecido em uma janela desktop 16:9. O vídeo e sua capa ficam em `src/assets/`; o build os copia para `dist/assets/`.
 - A foto dos painéis no hero é uma imagem conceitual. Não apresentar fotos de obras, clientes ou números como reais sem material autorizado.
 - A logo horizontal oficial aparece no cabeçalho e no rodapé; o favicon fornecido substitui o ícone provisório. A versão somente texto permanece em `image/` para uso futuro.
 O mapa e os links externos precisam de conexão com a internet. A página não inclui formulário, banco de dados ou integração de análise de tráfego.
 
 ## Antes de usar como site público
 
-1. Confirmar o número de WhatsApp configurado em `dist/assets/site.js` como canal comercial definitivo.
+1. Confirmar o número de WhatsApp configurado em `src/assets/site.js` como canal comercial definitivo.
 2. Revisar as respostas às dúvidas frequentes e as etapas de atendimento com a equipe.
 3. Usar fotos e dados reais somente depois de autorização.
 4. Definir domínio, hospedagem e HTTPS.

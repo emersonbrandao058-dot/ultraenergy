@@ -1,4 +1,4 @@
-# Publicar o site e o README
+# Arquivos locais e artefatos gerados
 *.md
 !/README.md
 .openai/
