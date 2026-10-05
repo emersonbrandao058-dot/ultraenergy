@@ -84,6 +84,15 @@ const pagePreloader = document.querySelector("#page-preloader");
 const preloaderProgress = pagePreloader?.querySelector("progress");
 const preloaderSkip = pagePreloader?.querySelector(".preloader-skip");
 const preloaderTasks = [];
+const openingContent = Array.from(document.body.children).filter(element =>
+  element !== pagePreloader && element.tagName !== "SCRIPT"
+);
+if (document.documentElement.classList.contains("page-loading")) {
+  openingContent.forEach(element => {
+    element.inert = true;
+    element.setAttribute("data-opening-inert", "");
+  });
+}
 let completedTasks = 0;
 let preloaderClosed = false;
 
@@ -99,10 +108,15 @@ function openSite() {
   if (preloaderClosed) return;
   preloaderClosed = true;
   clearTimeout(window.preloaderFailsafe);
+  window.preloaderContentObserver?.disconnect();
   clearTimeout(skipTimeout);
   const restoreFocus = pagePreloader?.contains(document.activeElement);
   pagePreloader?.classList.add("is-leaving");
   document.documentElement.classList.remove("page-loading");
+  openingContent.forEach(element => {
+    element.inert = false;
+    element.removeAttribute("data-opening-inert");
+  });
   if (restoreFocus) document.querySelector(".skip-link")?.focus();
   setTimeout(() => pagePreloader?.remove(), reducedMotion.matches ? 0 : 250);
 }
@@ -171,15 +185,14 @@ if (reelLoaders.length) {
   document.body.append(script);
 }
 
-const locationMap = document.querySelector(".location-stage > iframe[data-src]");
+const locationMap = document.querySelector(".location-map");
 if (locationMap) {
   const mapLoader = trackMedia(locationMap.parentElement);
   locationMap.addEventListener("load", () => {
     if (locationMap.hasAttribute("src")) mapLoader.finish();
   });
   locationMap.addEventListener("error", () => mapLoader.fail(), { once: true });
-  locationMap.loading = "eager";
-  locationMap.src = locationMap.dataset.src;
+  if (locationMap.dataset.loaded === "true") mapLoader.finish();
 }
 
 const monitoringVideo = document.querySelector(".monitoring-video");

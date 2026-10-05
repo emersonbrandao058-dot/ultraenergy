@@ -6,19 +6,40 @@
   <meta name="theme-color" content="#071d35">
   <meta name="description" content="Projeto, instalação, monitoramento e limpeza de sistemas fotovoltaicos em Feira de Santana e em toda a Bahia. Conheça a Ultra Energy.">
   <title>Ultra Energy | Energia solar em Feira de Santana e na Bahia</title>
+  <link rel="preconnect" href="https://www.google.com">
+  <link rel="preconnect" href="https://maps.gstatic.com" crossorigin>
   <link rel="icon" type="image/png" href="image/favicon.png">
   <style>
     .page-preloader { display: none; position: fixed; z-index: 10000; inset: 0; align-content: center; justify-items: center; color: #fff; background: #071d35; }
     html.page-loading { overflow: hidden; }
     html.page-loading .page-preloader { display: grid; }
-    html.page-loading body > :not(.page-preloader) { visibility: hidden; }
   </style>
   <script>
     document.documentElement.classList.add("page-loading");
+    window.preloaderContentObserver = new MutationObserver(function (entries) {
+      entries.forEach(function (entry) {
+        entry.addedNodes.forEach(function (element) {
+          if (element instanceof HTMLElement && element.parentElement === document.body &&
+              element.id !== "page-preloader" && element.tagName !== "SCRIPT") {
+            element.inert = true;
+            element.setAttribute("data-opening-inert", "");
+          }
+        });
+      });
+    });
+    window.preloaderContentObserver.observe(document.documentElement, { childList: true, subtree: true });
+    document.addEventListener("load", function (event) {
+      if (event.target.matches?.(".location-map")) event.target.dataset.loaded = "true";
+    }, true);
     window.preloaderFailsafe = setTimeout(function () {
       if (window.openUltraEnergy) { window.openUltraEnergy(); return; }
+      window.preloaderContentObserver.disconnect();
       document.documentElement.classList.remove("page-loading");
       document.getElementById("page-preloader")?.remove();
+      document.querySelectorAll("[data-opening-inert]").forEach(function (element) {
+        element.inert = false;
+        element.removeAttribute("data-opening-inert");
+      });
     }, 18000);
   </script>
   <link rel="stylesheet" href="assets/styles.css">
@@ -177,8 +198,7 @@
             <p>Atendimento em toda a Bahia</p>
             <a class="location-route" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rua%20Miguel%20Calmon%2C%2019%2C%20Jardim%20Cruzeiro%2C%20Feira%20de%20Santana%2C%20BA%2C%20Brasil" target="_blank" rel="noopener noreferrer">Abrir rota <span aria-hidden="true">&#8599;</span></a>
           </div>
-          <iframe title="Google Maps: busca por Rua Miguel Calmon, 19, Jardim Cruzeiro, Feira de Santana, Bahia" data-src="https://www.google.com/maps?q=Rua%20Miguel%20Calmon%2C%2019%2C%20Jardim%20Cruzeiro%2C%20Feira%20de%20Santana%2C%20BA%2C%20Brasil&amp;output=embed&amp;z=17" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-          <noscript><style>.location-stage > iframe[data-src] { display: none; } .location-stage noscript { display: contents; }</style><iframe title="Google Maps: busca por Rua Miguel Calmon, 19, Jardim Cruzeiro, Feira de Santana, Bahia" src="https://www.google.com/maps?q=Rua%20Miguel%20Calmon%2C%2019%2C%20Jardim%20Cruzeiro%2C%20Feira%20de%20Santana%2C%20BA%2C%20Brasil&amp;output=embed&amp;z=17" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></noscript>
+          <iframe class="location-map" title="Google Maps: busca por Rua Miguel Calmon, 19, Jardim Cruzeiro, Feira de Santana, Bahia" src="https://www.google.com/maps?q=Rua%20Miguel%20Calmon%2C%2019%2C%20Jardim%20Cruzeiro%2C%20Feira%20de%20Santana%2C%20BA%2C%20Brasil&amp;output=embed&amp;z=17" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
       </div>
     </section>
