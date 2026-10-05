@@ -7,10 +7,31 @@
   <meta name="description" content="Projeto, instalação, monitoramento e limpeza de sistemas fotovoltaicos em Feira de Santana e em toda a Bahia. Conheça a Ultra Energy.">
   <title>Ultra Energy | Energia solar em Feira de Santana e na Bahia</title>
   <link rel="icon" type="image/png" href="image/favicon.png">
+  <style>
+    .page-preloader { display: none; position: fixed; z-index: 10000; inset: 0; align-content: center; justify-items: center; color: #fff; background: #071d35; }
+    html.page-loading { overflow: hidden; }
+    html.page-loading .page-preloader { display: grid; }
+    html.page-loading body > :not(.page-preloader) { visibility: hidden; }
+  </style>
+  <script>
+    document.documentElement.classList.add("page-loading");
+    window.preloaderFailsafe = setTimeout(function () {
+      if (window.openUltraEnergy) { window.openUltraEnergy(); return; }
+      document.documentElement.classList.remove("page-loading");
+      document.getElementById("page-preloader")?.remove();
+    }, 18000);
+  </script>
   <link rel="stylesheet" href="assets/styles.css">
   <script src="assets/site.js" defer></script>
 </head>
 <body>
+  <div class="page-preloader" id="page-preloader" aria-label="Preparando o site da UltraEnergy">
+    <img class="preloader-logo" src="image/logo-ultraenergy-horizontal.webp" alt="Ultra Energy" width="420" height="179">
+    <span class="preloader-orbit" aria-hidden="true"></span>
+    <p class="preloader-status" role="status">Preparando sua experiência…</p>
+    <progress value="0" max="7" aria-label="Carregamento do site"></progress>
+    <button class="preloader-skip" type="button" hidden>Entrar no site</button>
+  </div>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
   <header class="site-header" id="inicio">

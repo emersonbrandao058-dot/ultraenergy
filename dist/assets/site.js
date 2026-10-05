@@ -79,55 +79,58 @@ if ("IntersectionObserver" in window && !reducedMotion.matches) {
   });
 }
 
-// Give integrations more time to load before the visitor reaches them.
-function whenNear(element, load, rootMargin = "1200px 0px") {
-  if (!element) return;
-  if (!("IntersectionObserver" in window)) {
-    load();
-    return;
-  }
-  const observer = new IntersectionObserver(entries => {
-    if (!entries.some(entry => entry.isIntersecting)) return;
-    observer.disconnect();
-    load();
-  }, { rootMargin });
-  observer.observe(element);
+// The opening screen waits for media, images and fonts, with an escape for slow services.
+const pagePreloader = document.querySelector("#page-preloader");
+const preloaderProgress = pagePreloader?.querySelector("progress");
+const preloaderSkip = pagePreloader?.querySelector(".preloader-skip");
+const preloaderTasks = [];
+let completedTasks = 0;
+let preloaderClosed = false;
+
+function waitForOpening(promise) {
+  const task = Promise.resolve(promise).catch(() => {}).then(() => {
+    completedTasks += 1;
+    if (preloaderProgress) preloaderProgress.value = completedTasks;
+  });
+  preloaderTasks.push(task);
 }
 
-// Each integration has its own status; the rest of the page stays usable.
-function createMediaLoader(host, label, delayedMessage = "Está demorando um pouco. Use o link abaixo se preferir.") {
-  const loader = document.createElement("div");
-  loader.className = "media-loader";
-  loader.setAttribute("role", "status");
-  const indicator = document.createElement("span");
-  indicator.className = "media-loader-indicator";
-  indicator.setAttribute("aria-hidden", "true");
-  const message = document.createElement("span");
-  message.className = "media-loader-message";
-  loader.append(indicator, message);
-  host.append(loader);
-  let timeout;
+function openSite() {
+  if (preloaderClosed) return;
+  preloaderClosed = true;
+  clearTimeout(window.preloaderFailsafe);
+  clearTimeout(skipTimeout);
+  const restoreFocus = pagePreloader?.contains(document.activeElement);
+  pagePreloader?.classList.add("is-leaving");
+  document.documentElement.classList.remove("page-loading");
+  if (restoreFocus) document.querySelector(".skip-link")?.focus();
+  setTimeout(() => pagePreloader?.remove(), reducedMotion.matches ? 0 : 250);
+}
 
-  function show(state, text) {
-    clearTimeout(timeout);
-    loader.hidden = false;
-    message.textContent = text;
-    host.dataset.mediaState = state;
-    host.setAttribute("aria-busy", String(state === "loading"));
-  }
-  show("loading", label);
+const skipTimeout = setTimeout(() => {
+  if (preloaderSkip) preloaderSkip.hidden = false;
+  const status = pagePreloader?.querySelector(".preloader-status");
+  if (status) status.textContent = "Alguns conteúdos estão demorando. Você já pode entrar.";
+}, 8000);
+preloaderSkip?.addEventListener("click", openSite);
+
+waitForOpening(Promise.all(Array.from(document.images, image => {
+  image.loading = "eager";
+  if (image.complete) return Promise.resolve();
+  return new Promise(resolve => {
+    image.addEventListener("load", resolve, { once: true });
+    image.addEventListener("error", resolve, { once: true });
+  });
+})));
+waitForOpening(document.fonts?.ready);
+
+function trackMedia(host) {
+  let settle;
+  waitForOpening(new Promise(resolve => { settle = resolve; }));
+  host.dataset.mediaState = "loading";
   return {
-    start(text = label) {
-      show("loading", text);
-      timeout = setTimeout(() => show("delayed", delayedMessage), 20000);
-    },
-    finish() {
-      clearTimeout(timeout);
-      loader.hidden = true;
-      host.dataset.mediaState = "ready";
-      host.setAttribute("aria-busy", "false");
-    },
-    fail(text) { show("error", text); }
+    finish() { host.dataset.mediaState = "ready"; settle(); },
+    fail() { host.dataset.mediaState = "error"; settle(); }
   };
 }
 
@@ -135,14 +138,15 @@ const reelLoaders = [];
 // These selected players use a 3:4 media area plus Instagram's fixed chrome.
 document.querySelectorAll(".reel-card").forEach(card => {
   const embed = card.querySelector(".reel-embed");
-  const loader = createMediaLoader(embed, "Carregando vídeo do Instagram…");
+  const loader = trackMedia(embed);
   reelLoaders.push(loader);
   const embedObserver = new MutationObserver(() => {
     const frame = embed.querySelector("iframe.instagram-media");
     if (!frame) return;
     embedObserver.disconnect();
+    frame.loading = "eager";
     frame.addEventListener("load", () => loader.finish(), { once: true });
-    frame.addEventListener("error", () => loader.fail("Não foi possível carregar. Abra o Reel pelo link abaixo."), { once: true });
+    frame.addEventListener("error", () => loader.fail(), { once: true });
   });
   embedObserver.observe(embed, { childList: true, subtree: true });
   function reservePlayerHeight(width) {
@@ -157,58 +161,56 @@ document.querySelectorAll(".reel-card").forEach(card => {
   }
 });
 
-whenNear(document.querySelector("#projetos"), () => {
-  reelLoaders.forEach(loader => loader.start());
+if (reelLoaders.length) {
   const script = document.createElement("script");
   script.src = "https://www.instagram.com/embed.js";
   script.async = true;
   script.addEventListener("load", () => window.instgrm?.Embeds?.process());
-  script.addEventListener("error", () => reelLoaders.forEach(loader => loader.fail("Não foi possível carregar. Abra o Reel pelo link abaixo.")));
+  script.addEventListener("error", () => reelLoaders.forEach(loader => loader.fail()));
   // The original links remain available if Instagram cannot be reached.
   document.body.append(script);
-});
+}
 
 const locationMap = document.querySelector(".location-stage > iframe[data-src]");
 if (locationMap) {
-  const mapLoader = createMediaLoader(locationMap.parentElement, "Carregando localização…", "Está demorando um pouco. Use o botão Abrir rota se preferir.");
+  const mapLoader = trackMedia(locationMap.parentElement);
   locationMap.addEventListener("load", () => {
     if (locationMap.hasAttribute("src")) mapLoader.finish();
   });
-  locationMap.addEventListener("error", () => mapLoader.fail("Mapa indisponível. Use o botão Abrir rota."), { once: true });
-  whenNear(locationMap, () => {
-    mapLoader.start();
-    // The observer already defers this iframe; avoid a second native delay.
-    locationMap.loading = "eager";
-    locationMap.src = locationMap.dataset.src;
-  });
+  locationMap.addEventListener("error", () => mapLoader.fail(), { once: true });
+  locationMap.loading = "eager";
+  locationMap.src = locationMap.dataset.src;
 }
 
 const monitoringVideo = document.querySelector(".monitoring-video");
 const videoPlayButton = document.querySelector(".video-play");
 if (monitoringVideo && videoPlayButton) {
   const screen = monitoringVideo.closest(".desktop-screen");
-  const videoLoader = createMediaLoader(screen, "Carregando prévia…", "Está demorando um pouco. Tente reproduzir novamente.");
+  const videoLoader = trackMedia(screen);
   const poster = new Image();
   poster.addEventListener("load", () => {
     if (monitoringVideo.paused) videoLoader.finish();
   }, { once: true });
-  poster.addEventListener("error", () => videoLoader.fail("Prévia indisponível. Toque em reproduzir."), { once: true });
+  poster.addEventListener("error", () => videoLoader.fail(), { once: true });
   poster.src = monitoringVideo.poster;
+  waitForOpening(new Promise(resolve => {
+    monitoringVideo.addEventListener("loadeddata", resolve, { once: true });
+    monitoringVideo.addEventListener("error", resolve, { once: true });
+  }));
   function prepareVideo() {
     if (monitoringVideo.hasAttribute("src")) return;
-    monitoringVideo.preload = "metadata";
+    monitoringVideo.preload = "auto";
     monitoringVideo.src = monitoringVideo.dataset.src;
     monitoringVideo.load();
   }
-  whenNear(document.querySelector("#monitoramento"), prepareVideo);
+  prepareVideo();
   monitoringVideo.addEventListener("pointerdown", prepareVideo, { once: true });
   videoPlayButton.addEventListener("click", async () => {
     prepareVideo();
-    videoLoader.start("Preparando vídeo…");
     try {
       await monitoringVideo.play();
     } catch {
-      videoLoader.fail("Toque em reproduzir para tentar novamente.");
+      videoLoader.fail();
       screen.classList.remove("is-playing");
     }
   });
@@ -217,11 +219,8 @@ if (monitoringVideo && videoPlayButton) {
     screen.classList.add("is-playing");
     if (document.activeElement === videoPlayButton) monitoringVideo.focus();
   });
-  monitoringVideo.addEventListener("waiting", () => {
-    if (!monitoringVideo.paused) videoLoader.start("Carregando vídeo…");
-  });
   monitoringVideo.addEventListener("canplay", () => videoLoader.finish());
-  monitoringVideo.addEventListener("error", () => videoLoader.fail("Vídeo indisponível. Tente reproduzir novamente."));
+  monitoringVideo.addEventListener("error", () => videoLoader.fail());
   monitoringVideo.addEventListener("pause", () => {
     screen.classList.remove("is-playing");
     videoLoader.finish();
@@ -258,3 +257,8 @@ document.querySelectorAll(".solution-card").forEach(card => {
     card.style.removeProperty("--spotlight-y");
   });
 });
+
+if (preloaderProgress) preloaderProgress.max = preloaderTasks.length;
+Promise.allSettled(preloaderTasks).then(openSite);
+// Reuse the early watchdog so a blocked external player cannot trap the visitor.
+window.openUltraEnergy = openSite;
