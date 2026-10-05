@@ -10,19 +10,26 @@ Edite os arquivos em `src/` e execute `npm run build` para gerar `dist/` quando 
 src/
 ├── index.html
 ├── assets/
-│   ├── hero-solar.png
+│   ├── hero-solar.webp
+│   ├── hero-solar-mobile.webp
 │   ├── site.js
 │   ├── solarz-motion.mp4
-│   ├── solarz-poster.jpg
+│   ├── solarz-poster.webp
 │   └── styles.css
 └── image/
     ├── favicon.png
-    └── logo-ultraenergy-horizontal.png
+    └── logo-ultraenergy-horizontal.webp
 
 dist/  ← gerado por npm run build e incluído no repositório
 ```
 
 O número e a mensagem inicial do WhatsApp ficam em `src/assets/site.js`.
+
+## Carregamento
+
+A imagem principal usa WebP, com uma versão menor para celular e prioridade alta no HTML. Logo, favicon e capa do vídeo foram reduzidos para os tamanhos de exibição; os arquivos originais maiores continuam disponíveis no histórico/na pasta de assets.
+
+O script do Instagram só é solicitado quando a seção de projetos chega a 500 px da tela. Os cards reservam o espaço dos players e mantêm os links diretos se o serviço falhar. O mapa, a capa e os metadados do vídeo SolarZ também carregam perto das respectivas seções; o vídeo só reproduz após uma ação do visitante. Sem JavaScript, o mapa e os links para os Reels e o MP4 permanecem disponíveis.
 
 ## Conteúdo e integrações
 

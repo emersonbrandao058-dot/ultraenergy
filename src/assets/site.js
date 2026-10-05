@@ -79,11 +79,64 @@ if ("IntersectionObserver" in window && !reducedMotion.matches) {
   });
 }
 
+// Start below-the-fold integrations shortly before their sections enter view.
+function whenNear(element, load, rootMargin = "500px 0px") {
+  if (!element) return;
+  if (!("IntersectionObserver" in window)) {
+    load();
+    return;
+  }
+  const observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    observer.disconnect();
+    load();
+  }, { rootMargin });
+  observer.observe(element);
+}
+
+// These selected players use a 3:4 media area plus Instagram's fixed chrome.
+document.querySelectorAll(".reel-card").forEach(card => {
+  function reservePlayerHeight(width) {
+    const height = `${Math.round((width - 2) * 4 / 3 + 179)}px`;
+    if (card.style.getPropertyValue("--reel-embed-height") !== height) {
+      card.style.setProperty("--reel-embed-height", height);
+    }
+  }
+  reservePlayerHeight(card.getBoundingClientRect().width);
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(entries => reservePlayerHeight(entries[0].contentRect.width)).observe(card);
+  }
+});
+
+whenNear(document.querySelector("#projetos"), () => {
+  const script = document.createElement("script");
+  script.src = "https://www.instagram.com/embed.js";
+  script.async = true;
+  script.addEventListener("load", () => window.instgrm?.Embeds?.process());
+  // The original links remain available if Instagram cannot be reached.
+  document.body.append(script);
+});
+
+const locationMap = document.querySelector(".location-stage > iframe[data-src]");
+whenNear(locationMap, () => {
+  locationMap.src = locationMap.dataset.src;
+});
+
 const monitoringVideo = document.querySelector(".monitoring-video");
 const videoPlayButton = document.querySelector(".video-play");
 if (monitoringVideo && videoPlayButton) {
   const screen = monitoringVideo.closest(".desktop-screen");
+  function prepareVideo() {
+    if (monitoringVideo.hasAttribute("src")) return;
+    monitoringVideo.poster = monitoringVideo.dataset.poster;
+    monitoringVideo.preload = "metadata";
+    monitoringVideo.src = monitoringVideo.dataset.src;
+    monitoringVideo.load();
+  }
+  whenNear(document.querySelector("#monitoramento"), prepareVideo);
+  monitoringVideo.addEventListener("pointerdown", prepareVideo, { once: true });
   videoPlayButton.addEventListener("click", async () => {
+    prepareVideo();
     try {
       await monitoringVideo.play();
     } catch {

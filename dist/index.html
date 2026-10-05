@@ -16,7 +16,7 @@
   <header class="site-header" id="inicio">
     <div class="nav-wrap container">
       <a class="brand" href="#inicio" aria-label="Ultra Energy, voltar ao início">
-        <img class="brand-logo" src="image/logo-ultraenergy-horizontal.png" alt="Ultra Energy" width="1920" height="819">
+        <img class="brand-logo" src="image/logo-ultraenergy-horizontal.webp" alt="Ultra Energy" width="420" height="179">
       </a>
       <nav class="site-nav" id="menu-principal" aria-label="Navegação principal">
         <a href="#solucoes">Soluções</a>
@@ -35,6 +35,10 @@
 
   <main id="conteudo">
     <section class="hero" aria-labelledby="hero-title">
+      <picture class="hero-image" aria-hidden="true">
+        <source media="(max-width: 680px)" srcset="assets/hero-solar-mobile.webp">
+        <img src="assets/hero-solar.webp" alt="" width="1672" height="941" fetchpriority="high" decoding="async">
+      </picture>
       <div class="hero-shade" aria-hidden="true"></div>
       <div class="container hero-content">
         <p class="hero-local">Feira de Santana · atendimento em toda a Bahia</p>
@@ -98,15 +102,19 @@
         </div>
         <div class="reels-grid" aria-label="Reels da Ultra Energy no Instagram">
           <figure class="reel-card">
+            <div class="reel-embed">
             <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DdrNXcSuY1f/" data-instgrm-version="14">
               <a href="https://www.instagram.com/reel/DdrNXcSuY1f/" target="_blank" rel="noopener noreferrer">Assistir ao primeiro Reel no Instagram</a>
             </blockquote>
+            </div>
             <figcaption><a href="https://www.instagram.com/reel/DdrNXcSuY1f/" target="_blank" rel="noopener noreferrer">Abrir o primeiro Reel no Instagram <span aria-hidden="true">↗</span></a></figcaption>
           </figure>
           <figure class="reel-card">
+            <div class="reel-embed">
             <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DcJdNV9OGcx/" data-instgrm-version="14">
               <a href="https://www.instagram.com/reel/DcJdNV9OGcx/" target="_blank" rel="noopener noreferrer">Assistir ao segundo Reel no Instagram</a>
             </blockquote>
+            </div>
             <figcaption><a href="https://www.instagram.com/reel/DcJdNV9OGcx/" target="_blank" rel="noopener noreferrer">Abrir o segundo Reel no Instagram <span aria-hidden="true">↗</span></a></figcaption>
           </figure>
         </div>
@@ -125,8 +133,9 @@
             <div class="desktop-frame">
               <div class="desktop-bar" aria-hidden="true"><span></span><span></span><span></span></div>
               <div class="desktop-screen">
-                <video class="monitoring-video" src="assets/solarz-motion.mp4" poster="assets/solarz-poster.jpg" controls playsinline preload="metadata" aria-label="Vídeo da plataforma Solarz com música"></video>
+                <video class="monitoring-video" data-src="assets/solarz-motion.mp4" data-poster="assets/solarz-poster.webp" controls playsinline preload="none" aria-label="Vídeo da plataforma Solarz com música"></video>
                 <button class="video-play" type="button" aria-label="Reproduzir vídeo da plataforma Solarz"><span aria-hidden="true">▶</span></button>
+                <noscript><a href="assets/solarz-motion.mp4">Assistir ao vídeo da plataforma Solarz com música</a></noscript>
               </div>
             </div>
             <figcaption>Acompanhamento com a plataforma Solarz.</figcaption>
@@ -147,7 +156,8 @@
             <p>Atendimento em toda a Bahia</p>
             <a class="location-route" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rua%20Miguel%20Calmon%2C%2019%2C%20Jardim%20Cruzeiro%2C%20Feira%20de%20Santana%2C%20BA%2C%20Brasil" target="_blank" rel="noopener noreferrer">Abrir rota <span aria-hidden="true">&#8599;</span></a>
           </div>
-          <iframe title="Google Maps: busca por Rua Miguel Calmon, 19, Jardim Cruzeiro, Feira de Santana, Bahia" src="https://www.google.com/maps?q=Rua%20Miguel%20Calmon%2C%2019%2C%20Jardim%20Cruzeiro%2C%20Feira%20de%20Santana%2C%20BA%2C%20Brasil&amp;output=embed&amp;z=17" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <iframe title="Google Maps: busca por Rua Miguel Calmon, 19, Jardim Cruzeiro, Feira de Santana, Bahia" data-src="https://www.google.com/maps?q=Rua%20Miguel%20Calmon%2C%2019%2C%20Jardim%20Cruzeiro%2C%20Feira%20de%20Santana%2C%20BA%2C%20Brasil&amp;output=embed&amp;z=17" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <noscript><style>.location-stage > iframe[data-src] { display: none; } .location-stage noscript { display: contents; }</style><iframe title="Google Maps: busca por Rua Miguel Calmon, 19, Jardim Cruzeiro, Feira de Santana, Bahia" src="https://www.google.com/maps?q=Rua%20Miguel%20Calmon%2C%2019%2C%20Jardim%20Cruzeiro%2C%20Feira%20de%20Santana%2C%20BA%2C%20Brasil&amp;output=embed&amp;z=17" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></noscript>
         </div>
       </div>
     </section>
@@ -219,7 +229,7 @@
   <footer class="footer">
     <div class="container footer-main">
       <div class="footer-brand">
-        <a class="brand brand-footer" href="#inicio" aria-label="Ultra Energy, voltar ao início"><img class="brand-logo" src="image/logo-ultraenergy-horizontal.png" alt="Ultra Energy" width="1920" height="819"></a>
+        <a class="brand brand-footer" href="#inicio" aria-label="Ultra Energy, voltar ao início"><img class="brand-logo" src="image/logo-ultraenergy-horizontal.webp" alt="Ultra Energy" width="420" height="179" loading="lazy" decoding="async"></a>
         <p>Projeto, instalação, monitoramento e limpeza de sistemas fotovoltaicos na Bahia.</p>
       </div>
       <nav class="footer-nav" aria-labelledby="footer-nav-title">
@@ -266,6 +276,5 @@
     <div class="container footer-bottom"><span>© <span id="year"></span> Ultra Energy</span><a href="#inicio">Voltar ao início ↑</a></div>
   </footer>
   <div class="contact-toast" role="status" aria-live="polite" hidden>O número de WhatsApp está aguardando confirmação da Ultra Energy.</div>
-  <script async src="https://www.instagram.com/embed.js"></script>
 </body>
 </html>
