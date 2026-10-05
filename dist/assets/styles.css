@@ -136,13 +136,39 @@ h3 { line-height: 1.2; }
 .reels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 326px), 1fr)); align-items: start; gap: 24px; width: min(100%, 1120px); margin-inline: auto; }
 .reel-card { position: relative; min-width: 0; margin: 0; }
 /* Reserve the current Instagram player dimensions while its script loads. */
-.reel-embed { min-height: var(--reel-embed-height, 640px); }
+.reel-embed { position: relative; min-height: var(--reel-embed-height, 640px); }
 .reel-embed > blockquote.instagram-media { display: grid; place-items: center; min-height: inherit; padding: 16px; border: 1px solid #dbdbdb; border-radius: 3px; background: var(--white); }
 .reel-embed > iframe.instagram-media { margin-bottom: 0 !important; }
 .reel-card .instagram-media { width: 100%; min-width: 326px; max-width: min(100%, 540px); margin: 0 auto; }
 .reel-card figcaption { margin-top: 12px; text-align: center; }
 .reel-card figcaption a { color: var(--navy); font-size: 14px; font-weight: 800; text-decoration: underline; text-decoration-color: var(--orange); text-underline-offset: 5px; }
 .reel-card figcaption a:hover { color: var(--panel-blue); }
+
+/* Loading feedback stays inside each media area, without blocking navigation. */
+.media-loader { position: absolute; z-index: 1; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; color: var(--navy); background: linear-gradient(135deg, #e8eff4, #f5f8fa); text-align: center; pointer-events: none; }
+.media-loader[hidden] { display: none; }
+.media-loader-message { max-width: 280px; font-size: 14px; font-weight: 600; line-height: 1.5; }
+.media-loader-indicator { width: 28px; height: 28px; flex: none; border: 3px solid rgba(7,29,53,.13); border-top-color: var(--orange-dark); border-radius: 50%; animation: media-spin .9s linear infinite; }
+[data-media-state="delayed"] > .media-loader .media-loader-indicator,
+[data-media-state="error"] > .media-loader .media-loader-indicator { animation: none; border-color: var(--orange-dark); opacity: .6; }
+.reel-embed[data-media-state] > blockquote { visibility: hidden; }
+.reel-embed > iframe.instagram-media,
+.location-stage > iframe[data-src] { transition: opacity .25s ease; }
+.reel-embed[data-media-state]:not([data-media-state="ready"]) > iframe,
+.location-stage[data-media-state]:not([data-media-state="ready"]) > iframe { opacity: 0; }
+.location-stage > .media-loader { z-index: 0; padding-left: min(45%, 420px); }
+.desktop-screen > .media-loader { inset: auto 12px 14px; flex-direction: row; gap: 10px; padding: 9px 12px; border-radius: 8px; color: var(--white); background: rgba(7,29,53,.9); }
+.desktop-screen .media-loader-message { max-width: none; font-size: 12px; }
+.desktop-screen .media-loader-indicator { width: 20px; height: 20px; border-color: rgba(255,255,255,.25); border-top-color: var(--orange); }
+.desktop-screen .video-play { z-index: 2; }
+@keyframes media-spin { to { transform: rotate(360deg); } }
+@media (max-width: 900px) {
+  .location-stage > .media-loader { top: auto; height: 360px; padding: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .media-loader-indicator { animation: none; }
+  .reel-embed > iframe.instagram-media, .location-stage > iframe[data-src] { transition: none; }
+}
 
 @media (min-width: 1200px) {
   .projects-layout { grid-template-columns: minmax(0, .76fr) minmax(0, 1.24fr); gap: clamp(40px, 5vw, 72px); align-items: center; }

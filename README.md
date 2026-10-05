@@ -29,7 +29,7 @@ O número e a mensagem inicial do WhatsApp ficam em `src/assets/site.js`.
 
 A imagem principal usa WebP, com uma versão menor para celular e prioridade alta no HTML. Logo, favicon e capa do vídeo foram reduzidos para os tamanhos de exibição; os arquivos originais maiores continuam disponíveis no histórico/na pasta de assets.
 
-O script do Instagram só é solicitado quando a seção de projetos chega a 500 px da tela. Os cards reservam o espaço dos players e mantêm os links diretos se o serviço falhar. O mapa, a capa e os metadados do vídeo SolarZ também carregam perto das respectivas seções; o vídeo só reproduz após uma ação do visitante. Sem JavaScript, o mapa e os links para os Reels e o MP4 permanecem disponíveis.
+O Instagram, o mapa e os metadados do vídeo SolarZ começam a carregar a 1.200 px da tela. Cada área mostra um indicador local de carregamento, que sai quando o conteúdo fica pronto, sem bloquear a navegação. Depois de 20 segundos de espera, o indicador oferece uma alternativa pelos links e botões existentes; erros também recebem uma mensagem. Os cards reservam o espaço dos players. A capa leve do SolarZ já é solicitada pelo HTML, e o vídeo só reproduz após uma ação do visitante. A animação respeita a preferência por movimento reduzido. Sem JavaScript, o mapa e os links para os Reels e o MP4 permanecem disponíveis.
 
 ## Conteúdo e integrações
 
