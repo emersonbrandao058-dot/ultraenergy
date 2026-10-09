@@ -153,18 +153,16 @@ h3 { line-height: 1.2; }
 
 /* A single opening screen prepares the page before revealing it. */
 .page-preloader { gap: 20px; padding: 28px; font-family: Arial, sans-serif; text-align: center; }
-.preloader-brand { position: relative; display: block; }
-.preloader-brand::after { content: ""; position: absolute; inset: 0; background: url("../image/logo-ultraenergy-horizontal.webp") center / contain no-repeat; filter: brightness(0) saturate(100%) invert(17%) sepia(21%) saturate(1200%) hue-rotate(167deg) brightness(90%) contrast(92%); clip-path: inset(0 0 30% 38%); pointer-events: none; }
 .preloader-logo { width: min(240px, 70vw); height: auto; }
-.preloader-orbit { width: 42px; height: 42px; margin: 8px auto 0; border: 3px solid var(--surface-alt); border-top-color: var(--blue); border-radius: 50%; animation: preloader-spin .9s linear infinite; }
-.preloader-status { margin: 0; max-width: 320px; color: var(--muted); font-size: 14px; line-height: 1.6; }
-.page-preloader progress { width: min(220px, 65vw); height: 3px; border: 0; border-radius: 3px; overflow: hidden; appearance: none; background: var(--surface-alt); }
-.page-preloader progress::-webkit-progress-bar { background: var(--surface-alt); }
-.page-preloader progress::-webkit-progress-value { background: var(--blue); }
-.page-preloader progress::-moz-progress-bar { background: var(--blue); }
-.preloader-skip { padding: 10px 16px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: transparent; font: inherit; font-size: 13px; }
+.preloader-orbit { width: 42px; height: 42px; margin: 8px auto 0; border: 3px solid rgba(255,255,255,.15); border-top-color: var(--orange); border-radius: 50%; animation: preloader-spin .9s linear infinite; }
+.preloader-status { margin: 0; max-width: 320px; color: #d6e3ec; font-size: 14px; line-height: 1.6; }
+.page-preloader progress { width: min(220px, 65vw); height: 3px; border: 0; border-radius: 3px; overflow: hidden; appearance: none; background: #29445a; }
+.page-preloader progress::-webkit-progress-bar { background: #29445a; }
+.page-preloader progress::-webkit-progress-value { background: var(--orange); }
+.page-preloader progress::-moz-progress-bar { background: var(--orange); }
+.preloader-skip { padding: 10px 16px; border: 1px solid #658096; border-radius: 6px; color: var(--white); background: transparent; font: inherit; font-size: 13px; }
 .preloader-skip:hover { border-color: var(--orange); }
-.preloader-skip:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+.preloader-skip:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
 .page-preloader.is-leaving { display: grid; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
 @keyframes preloader-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
