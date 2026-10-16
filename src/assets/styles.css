@@ -358,7 +358,7 @@ html.page-loading .location-map { position: fixed; top: 0; left: 0; width: 100%;
   .header-cta { padding: 10px 12px; font-size: 12px; }
   .hero { min-height: 640px; height: 90svh; }
   .hero-image img { object-position: 60% center; }
-  .contact { background-image: linear-gradient(100deg, rgba(4,21,38,.96),rgba(4,21,38,.82)),url("hero-solar-mobile.webp"); }
+  .contact { background-image: linear-gradient(100deg, var(--contact-wash-start), var(--contact-wash-end)), url("hero-solar-mobile.webp"); background-position: center 55%; background-size: cover; }
   .hero-shade { background: linear-gradient(90deg,rgba(3,20,38,.92),rgba(3,20,38,.52)),linear-gradient(0deg,rgba(3,20,38,.55),transparent 40%); }
   .hero-local { font-size: 12px; }
   .hero h1 { font-size: clamp(2.5rem, 10vw, 3.3rem); }
